@@ -17,7 +17,6 @@ newGameEl.addEventListener("click", reset);
 
 const cells = [[cell1, cell2, cell3], [cell4, cell5, cell6], [cell7, cell8, cell9]];
 let gameboard = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-let winner = null;
 let scoreJoueur = 0;
 let scoreOrdinateur = 0;
 
@@ -28,6 +27,7 @@ scoreOrdinateurEl.innerText = `Score : ${scoreOrdinateur}`;
 const ia = 'O';
 const player = 'X';
 
+let playerPlayFirst = true;
 
 function reset() {
     for (const row of cells) {
@@ -37,7 +37,6 @@ function reset() {
     }
     gameboard = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
     isFinished = false;
-    winner = null;
     winnerEl.innerText = "";
 }
 
@@ -46,12 +45,15 @@ function play() {
     for (const row of cells) {
         for (const cell of row) {
             cell.addEventListener("click", () => {
-                if (cell.innerHTML === "" && winner === null) {
+                if (cell.innerHTML === "" && checkWin() === null) {
                     cell.innerHTML = player;
                     gameboard[cell.id[4] - 1][cell.id[5] - 1] = player;
-                    checkWin();
+                    let winner = checkWin();
                     if (winner === null) {
                         IAv2()
+                    }
+                    else { 
+                        countScores(winner);
                     }
                 }
             });
@@ -61,6 +63,7 @@ function play() {
 
 
 function checkWin() {
+    let winner = null;
     if (isMoveAvailable() === false) {
         winner = "Draw";
     }
@@ -96,21 +99,19 @@ function checkWin() {
             winner = ia;
         }
     }
-    winnerEl.innerText = `${winner}`;
+    return winner;
 }
 
 
-function countScores() {
-    if (winner !== null) {
-        winnerEl.innerText = `${winner}`;
-        if (winner === player) {
-            scoreJoueur++;
-            scoreJoueurEl.innerText = `Score : ${scoreJoueur}`;
-        }
-        else if (winner === ia) {
-            scoreOrdinateur++;
-            scoreOrdinateurEl.innerText = `Score : ${scoreOrdinateur}`;
-        }
+function countScores(winner) {
+    winnerEl.innerText = `${winner} a gagné !`;
+    if (winner === player) {
+        scoreJoueur++;
+        scoreJoueurEl.innerText = `Score : ${scoreJoueur}`;
+    }
+    else if (winner === ia) {
+        scoreOrdinateur++;
+        scoreOrdinateurEl.innerText = `Score : ${scoreOrdinateur}`;
     }
 }
 
@@ -147,7 +148,10 @@ function IAv2() {
     let bestMove = findBestMove();
     cells[bestMove[0]][bestMove[1]].innerHTML = ia;
     gameboard[bestMove[0]][bestMove[1]] = ia;
-    checkWin();
+    let winner = checkWin();
+    if (winner !== null) {
+        countScores(winner);
+    }
 }
 
 function findBestMove() {
@@ -158,7 +162,6 @@ function findBestMove() {
             if (gameboard[i][j] === 0) {
                 gameboard[i][j] = ia;
                 let score = minmax(gameboard, 0, false);
-                winner = null;
                 gameboard[i][j] = 0;
                 if (score > bestScore) {
                     bestScore = score;
@@ -173,7 +176,7 @@ function findBestMove() {
 
 
 function minmax(gameboard, depth, isMaximizing) {
-    checkWin();
+    let winner = checkWin();
     if (winner === ia) {
         return 10 - depth;
     }
@@ -213,4 +216,7 @@ function minmax(gameboard, depth, isMaximizing) {
     }
 }
 
+if (!playerPlayFirst) {
+    IAv2();
+}
 play();
