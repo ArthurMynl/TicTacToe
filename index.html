@@ -1,12 +1,28 @@
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 
 <body>
     <!-- Create the gameboard -->
+    
+    <div class="results">
+        <div class="joueur">
+            <h2>Joueur</h2>
+            <h2 id="score-joueur">Score : </h2>
+        </div>
+        <div class="ordinateur">
+            <h2>Ordinateur</h2>
+            <h2 id="score-ordinateur">Score : </h2>
+        </div>
+    </div>
+    <h2 id="winner"></h2>
     <div class="gameboard">
         <button class="cell" id="cell11"></button>
         <button class="cell" id="cell12"></button>
@@ -18,19 +34,10 @@
         <button class="cell" id="cell32"></button>
         <button class="cell" id="cell33"></button>
     </div>
-    <div class="results">
-        <div class="joueur">
-            <h2>Joueur</h2>
-            <h2 id="score-joueur">Score : </h2>
-        </div>
-        <div class="ordinateur">
-            <h2>Ordinateur</h2>
-            <h2 id="score-ordinateur">Score : </h2>
-        </div>
-        <h2 id="winner"></h2>
-    </div>
     <div class="buttons">
         <button id="new-game">New Game</button>
+        <input type="checkbox" id="switch" />
+        <label for="switch">I play first</label>
     </div>
 </body>
 

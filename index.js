@@ -12,6 +12,7 @@ const scoreJoueurEl = document.getElementById("score-joueur");
 const scoreOrdinateurEl = document.getElementById("score-ordinateur");
 const winnerEl = document.getElementById("winner");
 const newGameEl = document.getElementById("new-game");
+const checkbox = document.getElementById("switch");
 
 newGameEl.addEventListener("click", reset);
 
@@ -24,10 +25,10 @@ scoreJoueurEl.innerText = `Score : ${scoreJoueur}`;
 scoreOrdinateurEl.innerText = `Score : ${scoreOrdinateur}`;
 
 
-const ia = 'O';
-const player = 'X';
+let ia = 'O';
+let player = 'X';
+let playerPlayFirst = false;
 
-let playerPlayFirst = true;
 
 function reset() {
     for (const row of cells) {
@@ -38,6 +39,10 @@ function reset() {
     gameboard = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
     isFinished = false;
     winnerEl.innerText = "";
+    playerPlayFirst = !playerPlayFirst;
+    if (!playerPlayFirst) {
+        IAv2();
+    }
 }
 
 
@@ -52,7 +57,7 @@ function play() {
                     if (winner === null) {
                         IAv2()
                     }
-                    else { 
+                    else {
                         countScores(winner);
                     }
                 }
@@ -127,6 +132,17 @@ function isMoveAvailable() {
     return false;
 }
 
+function boardEmpty() {
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (gameboard[i][j] !== 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 
 /**
  * Deprecated : in this function IA is just playing randomly
@@ -145,12 +161,20 @@ function IA() {
 }
 
 function IAv2() {
-    let bestMove = findBestMove();
-    cells[bestMove[0]][bestMove[1]].innerHTML = ia;
-    gameboard[bestMove[0]][bestMove[1]] = ia;
-    let winner = checkWin();
-    if (winner !== null) {
-        countScores(winner);
+    if (boardEmpty()) {
+        random = Math.floor(Math.random() * 3);
+        random2 = Math.floor(Math.random() * 3);
+        cells[random][random2].innerHTML = ia;
+        gameboard[random][random2] = ia;
+    }
+    else {
+        let bestMove = findBestMove();
+        cells[bestMove[0]][bestMove[1]].innerHTML = ia;
+        gameboard[bestMove[0]][bestMove[1]] = ia;
+        let winner = checkWin();
+        if (winner !== null) {
+            countScores(winner);
+        }
     }
 }
 
