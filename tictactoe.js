@@ -145,7 +145,7 @@ function boardEmpty() {
 
 
 /**
- * Deprecated : in this function IA is just playing randomly
+ * Deprecated : in this function IA is just playing randomly, moreover, it doesn't work with the new game approach'
  */
 function IA() {
     let random = Math.floor(Math.random() * 3);
